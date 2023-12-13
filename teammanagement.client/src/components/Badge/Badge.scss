@@ -1,0 +1,21 @@
+@import "../../GlobalStyles";
+
+span {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.52px;
+  align-self: center;
+  border-radius: 16px;
+  padding: 2px 8px 2px 8px;
+  gap: 4px;
+
+  &.success {
+    color: $helper-green;
+    background-color: $helper-green-light;
+  }
+
+  &.danger {
+    color: $helper-rose-dark;
+    background-color: $helper-rose-light;
+  }
+}

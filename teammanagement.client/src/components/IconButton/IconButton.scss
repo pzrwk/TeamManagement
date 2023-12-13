@@ -1,0 +1,21 @@
+@import "../../GlobalStyles";
+
+.iconButton {
+  width: 24px;
+  height: 24px;
+  color: $text-dark;
+  background-color: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  border: none;
+
+  &:hover, &:focus-visible, &:focus, &:active, &:focus-within, &:visited, &:target {
+    border: none;
+  }
+
+  & > span.disabled {
+    color: $gray;
+  }
+}
