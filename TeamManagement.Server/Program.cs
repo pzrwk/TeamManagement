@@ -12,6 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors((options) =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+                builder => builder.WithOrigins("https://localhost:5173/")
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod());
+});
+
 builder.Services
     .AddDbContext(builder.Configuration.GetConnectionString("DefaultConnectionString")!)
     .AddApplication()
@@ -32,6 +40,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors((options) =>
+{
+    options.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials();
+});
 app.UseAuthorization();
 
 app.MapControllers();

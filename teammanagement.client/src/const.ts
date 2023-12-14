@@ -1,0 +1,1 @@
+export const baseAPIUri = 'http://localhost:5129'

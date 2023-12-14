@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TeamManagement.Application.Member.Commands;
 using TeamManagement.Application.Member.Queries;
@@ -66,6 +67,17 @@ public class MemberController : ControllerBase
         if (result == null)
             return BadRequest($"Member with id {member.Id} not found");
     
+        return Ok(result);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> ChangeMemberStatus(ChangeMemberStatus command)
+    {
+        var result = await _mediator.Send(command);
+
+        if(result == null)
+            return BadRequest($"Member with id {command.Id} not found or status is already set");
+        
         return Ok(result);
     }
 }

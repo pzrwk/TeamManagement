@@ -5,13 +5,15 @@ type InputProps = {
     labelText?: string | null
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-function Input({name, labelText = null, ...props}: InputProps) {
+function Input({name, required, labelText = null, ...props}: InputProps) {
+
+    const label = labelText !== null && required === true ?  labelText.concat('*') : labelText;
     return (
-        <div>
-            {labelText !== null &&
-                <label htmlFor={name}>{labelText}</label>
+        <div className='inputBlock'>
+            {label !== null &&
+                <label htmlFor={name}>{label}</label>
             }
-            <input name={name} {...props}></input>
+            <input name={name} required={required} {...props}></input>
         </div>
     )
 }

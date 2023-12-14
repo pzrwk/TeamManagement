@@ -1,1 +1,32 @@
 @import "../../GlobalStyles";
+
+.inputBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: self-start;
+  width: 100%;
+  font-weight: 500;
+  position: relative;
+
+  & > input {
+    color: $text-dark;
+    font-size: 14px;
+    width: 100%;
+    border: 1px solid $gray-200;
+    border-radius: 8px;
+    padding: 8px 16px;
+
+    & .readonly {
+      border: none;
+    }
+  }
+
+  & > label {
+    position: relative;
+    top: 8px;
+    background-color: white;
+    color: $text-color-light;
+    font-size: 12px;
+    margin-left: 16px;
+  }
+}

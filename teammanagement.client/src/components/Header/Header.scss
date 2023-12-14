@@ -1,0 +1,14 @@
+@import "../../GlobalStyles";
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    & > .header-text {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+    }
+}

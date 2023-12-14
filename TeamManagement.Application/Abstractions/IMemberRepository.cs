@@ -13,5 +13,7 @@ namespace TeamManagement.Application.Abstractions
         Task<Domain.Entities.Member?> GetMemberById(int id);
         Task<Domain.Entities.Member?> AddMember(Domain.Entities.Member? member);
         Task<Domain.Entities.Member?> UpdateMember(int memberId, Domain.Entities.Member member);
+        Task<Domain.Entities.Member?> ChangeMemberStatus(int memberId, bool status);
+        
     }
 }

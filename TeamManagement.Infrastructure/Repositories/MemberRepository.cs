@@ -48,5 +48,22 @@ namespace TeamManagement.Infrastructure.Repositories
 
             return toUpdate;
         }
+
+        public async Task<Member?> ChangeMemberStatus(int memberId, bool status)
+        {
+            var toUpdate = await _dbContext.Members.FirstOrDefaultAsync(m => m.Id == memberId);
+            
+            if (toUpdate is null)
+                return null;
+
+            if (toUpdate.IsActive == status)
+                return null;
+
+            toUpdate.IsActive = status;
+
+            await _dbContext.SaveChangesAsync();
+
+            return toUpdate;
+        }
     }
 }

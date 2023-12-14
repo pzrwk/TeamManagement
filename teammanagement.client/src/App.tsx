@@ -1,65 +1,66 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import Button from "./components/Button/Button.tsx";
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-import Dialog from "./components/Dialog/Dialog.tsx";
+import { useEffect, useState } from "react";
+import "./App.scss";
+import AddNewMemberDialog from "./components/AddNewMemberDialog/AddNewMemberDialog.tsx";
+import ConfirmationDialog from "./components/Dialog/ConfirmationDialog.tsx";
+import { useDialogOpen } from "./hooks/hooks.ts";
+import Header from "./components/Header/Header.tsx";
+import axios, { AxiosResponse } from "axios";
+import { baseAPIUri } from "./const.ts";
+import MembersTable from "./components/MembersTable/MembersTable.tsx";
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-}
+export type MemberData = {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  isActive: boolean;
+  createdAt: string;
+};
 
 function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+  const {
+    isDialogOpen: isAddMemberDialogOpen,
+    openDialog: openAddMemberDialog,
+    closeDialog: closeAddMemberDialog,
+  } = useDialogOpen();
+  const {
+    isDialogOpen: isConfirmationDialogOpen,
+    openDialog: openConfirmationDialog,
+    closeDialog: closeConfirmationDialog,
+  } = useDialogOpen();
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
+  const [data, setData] = useState<Array<MemberData> | null>(null);
 
-    const contents = forecasts === undefined
-        ?
-        <>
-            <Dialog open onClose={() => console.log('Wywolalem sie')}></Dialog>
-        </>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                    <th>
+  useEffect(() => {
+    axios.get(`${baseAPIUri}/Member`).then((res: AxiosResponse) => {
+      const incomingData: Array<MemberData> = res.data;
+      setData(incomingData);
+    });
+  }, []);
 
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+  return (
+    <div>
+      <Header
+        openAddMemberDialog={openAddMemberDialog}
+        openConfirmationDialog={openConfirmationDialog}
+      />
+      <div className="content">
+        <MembersTable data={data}/>
+      </div>
 
-    return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
+      {isAddMemberDialogOpen &&<AddNewMemberDialog
+        open={isAddMemberDialogOpen}
+        closeDialog={closeAddMemberDialog}
+      />}
 
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
+      {isConfirmationDialogOpen && <ConfirmationDialog
+        open={isConfirmationDialogOpen}
+        closeDialog={closeConfirmationDialog}
+      >
+        <p>Członek zespołu dodany</p>
+      </ConfirmationDialog>}
+    </div>
+  );
 }
 
 export default App;

@@ -11,11 +11,16 @@
   align-self: center;
   border: none;
 
+  &:hover {
+    cursor: pointer;
+    color: $gray-400;
+  }
+
   &:hover, &:focus-visible, &:focus, &:active, &:focus-within, &:visited, &:target {
     border: none;
   }
 
   & > span.disabled {
-    color: $gray;
+    color: $gray-200;
   }
 }
