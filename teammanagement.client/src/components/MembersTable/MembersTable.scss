@@ -1,65 +1,70 @@
 @import "../../GlobalStyles";
 
 .table {
-    border: 1px solid $gray-200;
-    border-radius: 8px;
-    width: 100%;
-    border-collapse:collapse;  
-    
+  border: 1px solid $gray-200;
+  border-radius: 8px;
+  width: 100%;
+  border-collapse: collapse;
+
+  tr {
+    background-color: transparent;
+  }
+
+  thead {
+    & th:hover {
+      background-color: $gray-30;
+      cursor: pointer;
+    }
+  }
+
+  tbody {
     tr {
-        background-color: transparent;
+      &:hover {
+        background-color: $gray-30;
+        cursor: pointer;
+      }
     }
+  }
 
-    thead {
-        & th:hover {
-            background-color: $gray-30;
-            cursor: pointer;
-        }
+  td,
+  th {
+    border-bottom: 1px solid $gray-200;
+  }
+
+  th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0em;
+    padding: 12px 16px 12px 16px;
+
+    &:last-child {
+      text-align: center;
     }
+  }
 
-    tbody {
-        tr {
-            &:hover {
-                background-color: $gray-30;
-                cursor: pointer;
-            }
-        }
-    }
-    
+  td {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    background-color: transparent;
+    padding: 16px;
+  }
+}
 
-    td, th {
-        border-bottom: 1px solid $gray-200;
-    }
-
-    th {
-        text-align: left;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 18px;
-        letter-spacing: 0em;
-        padding: 12px 16px 12px 16px;
-
-        &:last-child {
-            text-align: center;
-        }
-    }
-
-    td {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        letter-spacing: 0em;
-        text-align: left;
-        background-color: transparent;
-        padding: 16px;
-    }
+.avatar-small {
+  width: 31px;
+  height: 31px;
 }
 
 .tooltip {
-    position: absolute;
-    transform: translate(-35px, 45px);
+  position: absolute;
+  transform: translate(-35px, 45px);
 
-    & button {
-        border: none;
-    }
+  & button {
+    border: none;
+  }
 }

@@ -1,4 +1,4 @@
-import './ConfirmationDialog.scss';
+import "./ConfirmationDialog.scss";
 import Button from "../Button/Button";
 import { Dialog, DialogFooter, DialogProps } from "./Dialog";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
@@ -22,9 +22,9 @@ function ConfirmationDialog({
         <CheckCircleOutlinedIcon />
         {children}
       </div>
-        <DialogFooter>
-          <Button variant="orange" text="Ukryj" onClick={() => closeDialog()} />
-        </DialogFooter>
+      <DialogFooter>
+        <Button variant="orange" text="Ukryj" onClick={closeDialog} />
+      </DialogFooter>
     </Dialog>
   );
 }

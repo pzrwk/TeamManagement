@@ -1,4 +1,4 @@
-@import '../../GlobalStyles';
+@import "../../GlobalStyles";
 
 .dialog-mask {
   position: fixed;
@@ -11,6 +11,14 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+
+  & .invisible {
+    display: none;
+  }
+
+  & .visible {
+    display: block;
+  }
 }
 
 .dialog {
@@ -35,6 +43,11 @@
     & > button:hover {
       cursor: pointer;
     }
+  }
+
+  .dialog-content {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
   }
 
   .dialog-footer {

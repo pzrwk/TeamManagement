@@ -5,31 +5,51 @@ import React, { useState } from "react";
 import Badge from "../Badge/Badge";
 import IconButton from "../IconButton/IconButton";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { baseAPIUri } from "../../const";
 import { useDialogOpen } from "../../hooks/hooks";
 import EditMemberDialog from "../EditMemberDialog/EditMemberDialog";
 import classNames from "classnames";
 import Button from "../Button/Button";
+import ConfirmationDialog from "../Dialog/ConfirmationDialog";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Sort,
+  TeamManagementState,
+  sortMembers,
+  updateMember,
+} from "../../store/store";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 
-type TableProps = {
-  data: Array<MemberData>;
-  text?: string;
-} & React.TableHTMLAttributes<HTMLTableElement>;
+type TableProps = React.TableHTMLAttributes<HTMLTableElement>;
 
-function MembersTable({ data, text, ...props }: TableProps) {
+function MembersTable({ ...props }: TableProps) {
   const { isDialogOpen, openDialog, closeDialog } = useDialogOpen();
   const [memberId, setMemberId] = useState<number>(-1);
   const [actionsVisible, setActionsVisible] = useState<boolean>(false);
-  const [memberIdWithOpenTooltip, setMemberIdWithOpenTooltip] = useState<number | null>(null);
+  const [memberIdWithOpenTooltip, setMemberIdWithOpenTooltip] = useState<
+    number | null
+  >(null);
+
+  const dispatch = useDispatch();
+  const data = useSelector((state: TeamManagementState) => state.membersData);
+
+  const {
+    isDialogOpen: isConfirmationDialogOpen,
+    openDialog: openConfirmationDialog,
+    closeDialog: closeConfirmationDialog,
+  } = useDialogOpen();
+  const [confirmationDialogMessage, setConfirmationDialogMessage] =
+    useState<string>("");
 
   const keys = [
-    "Nazwa",
-    "Adres e-mail",
-    "Numer telefonu",
-    "Status",
-    "Data utworzenia",
-    "Akcje",
+    { name: "name", value: "Nazwa" },
+    { name: "email", value: "Adres e-mail" },
+    { name: "phoneNumber", value: "Numer telefonu" },
+    { name: "isActive", value: "Status" },
+    { name: "createdAt", value: "Data utworzenia" },
+    { name: "action", value: "Akcja" },
   ];
 
   const openEditDialog = (id: number) => {
@@ -44,8 +64,35 @@ function MembersTable({ data, text, ...props }: TableProps) {
   };
 
   const changeStatus = (id: number, status: boolean) => {
-    axios.patch(`${baseAPIUri}/Member`, {id, isActive: !status})
-  }
+    axios
+      .patch(`${baseAPIUri}/Member`, { id, isActive: !status })
+      .then((res: AxiosResponse) => {
+        dispatch(updateMember(res.data as MemberData));
+        setActionsVisible(false);
+        setConfirmationDialogMessage(
+          `Członek zespołu został ${
+            (res.data as MemberData).isActive == true
+              ? "odblokowany"
+              : "zablokowany"
+          }`
+        );
+        openConfirmationDialog();
+      });
+  };
+
+  const sorting: Sort = useSelector((state: TeamManagementState) => state.sort);
+
+  const showSortIcon = (order: "asc" | "desc") => {
+    return order === "asc" ? (
+      <ArrowUpwardOutlinedIcon
+        style={{ fontSize: "16px", marginLeft: "4px" }}
+      />
+    ) : (
+      <ArrowDownwardOutlinedIcon
+        style={{ fontSize: "16px", marginLeft: "4px" }}
+      />
+    );
+  };
 
   return (
     <>
@@ -53,15 +100,45 @@ function MembersTable({ data, text, ...props }: TableProps) {
         <thead>
           <tr>
             {keys.map((key) => {
-              return <th>{key}</th>;
+              return (
+                <th
+                  onClick={() => {
+                    if (key.name === "action") return;
+                    dispatch(sortMembers(key.name as keyof MemberData));
+                  }}
+                >
+                  <div
+                    className={classNames({
+                      "align-items-center": true,
+                      "justify-content-center": key.name === "action",
+                    })}
+                  >
+                    {key.value}
+                    {key.name === sorting.key && showSortIcon(sorting.order)}
+                  </div>
+                </th>
+              );
             })}
           </tr>
         </thead>
         <tbody>
-          {_.orderBy(data, 'isActive', 'desc').map((member) => {
+          {_.orderBy(data, sorting.key, sorting.order).map((member) => {
             return (
               <tr key={member.id}>
-                <td onClick={() => openEditDialog(member.id)}>{member.name}</td>
+                <td onClick={() => openEditDialog(member.id)}>
+                  <div className="align-items-center gap-8">
+                    <img
+                      className="avatar-small"
+                      src={
+                        member.avatarUrl !== null
+                          ? member.avatarUrl
+                          : "/avatar.jpeg"
+                      }
+                      alt="avatar"
+                    />
+                    {member.name}
+                  </div>
+                </td>
                 <td onClick={() => openEditDialog(member.id)}>
                   {member.email}
                 </td>
@@ -79,12 +156,14 @@ function MembersTable({ data, text, ...props }: TableProps) {
                 >
                   {new Date(Date.parse(member.createdAt)).toLocaleDateString()}
                 </td>
-                <td className="justify-content-center">
-                  <IconButton
-                    icon={<MoreVertOutlinedIcon />}
-                    className="text-gray-600"
-                    onClick={() => showActions(member.id)}
-                  />
+                <td>
+                  <div className="justify-content-center">
+                    <IconButton
+                      icon={<MoreVertOutlinedIcon />}
+                      className="text-gray-600"
+                      onClick={() => showActions(member.id)}
+                    />
+                  </div>
                   {actionsVisible && memberIdWithOpenTooltip === member.id && (
                     <div className={classNames("tooltip")}>
                       {member.isActive ? (
@@ -92,14 +171,18 @@ function MembersTable({ data, text, ...props }: TableProps) {
                           style={{ border: "none" }}
                           variant="transparent"
                           text="Zablokuj"
-                          onClick={() => changeStatus(member.id, member.isActive)}
+                          onClick={() =>
+                            changeStatus(member.id, member.isActive)
+                          }
                         />
                       ) : (
                         <Button
                           style={{ border: "none" }}
                           variant="transparent"
                           text="Odblokuj"
-                          onClick={() => changeStatus(member.id, member.isActive)}
+                          onClick={() =>
+                            changeStatus(member.id, member.isActive)
+                          }
                         />
                       )}
                     </div>
@@ -117,6 +200,18 @@ function MembersTable({ data, text, ...props }: TableProps) {
           open={isDialogOpen}
           onClose={() => setMemberId(-1)}
         />
+      )}
+      {isConfirmationDialogOpen && (
+        <ConfirmationDialog
+          closeDialog={() => {
+            setActionsVisible(false);
+            setMemberIdWithOpenTooltip(null);
+            closeConfirmationDialog();
+          }}
+          open={isConfirmationDialogOpen}
+        >
+          {confirmationDialogMessage}
+        </ConfirmationDialog>
       )}
     </>
   );

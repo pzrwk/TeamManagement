@@ -20,7 +20,8 @@ public class CreateMemberHandler : IRequestHandler<CreateMember, Domain.Entities
             Email = request.Email,
             IsActive = request.IsActive,
             Name = request.Name,
-            PhoneNumber = request.PhoneNumber
+            PhoneNumber = request.PhoneNumber,
+            AvatarUrl = request.AvatarUrl
         };
 
         return await _memberRepository.AddMember(member);

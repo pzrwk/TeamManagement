@@ -15,14 +15,6 @@ public class UpdateMemberHandler : IRequestHandler<UpdateMember, Domain.Entities
     
     public async Task<Domain.Entities.Member?> Handle(UpdateMember request, CancellationToken cancellationToken)
     {
-        var member = new Domain.Entities.Member
-        {
-            Email = request.Email,
-            IsActive = request.IsActive,
-            Name = request.Name,
-            PhoneNumber = request.PhoneNumber
-        };
-
-        return await _memberRepository.UpdateMember(request.Id, member);
+        return await _memberRepository.UpdateMember(request);
     }
 }

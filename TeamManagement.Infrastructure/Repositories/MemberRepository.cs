@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamManagement.Application.Abstractions;
+using TeamManagement.Application.Member.Commands;
 using TeamManagement.Domain.Entities;
 
 namespace TeamManagement.Infrastructure.Repositories
@@ -32,34 +33,24 @@ namespace TeamManagement.Infrastructure.Repositories
             return await _dbContext.Members.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<Member?> UpdateMember(int memberId, Member member)
+        public async Task<Member?> UpdateMember(UpdateMember member)
         {
-            var toUpdate = await _dbContext.Members.FirstOrDefaultAsync(m => m.Id == memberId);
+            var toUpdate = await _dbContext.Members.FirstOrDefaultAsync(m => m.Id == member.Id);
 
             if (toUpdate is null)
                 return null;
             
-            toUpdate.Email = member.Email;
-            toUpdate.Name = member.Name;
-            toUpdate.PhoneNumber = member.PhoneNumber;
-            toUpdate.IsActive = member.IsActive;
+            if (!string.IsNullOrEmpty(member.Email))
+                toUpdate.Email = member.Email;
 
-            await _dbContext.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(member.Name))
+                toUpdate.Name = member.Name;
 
-            return toUpdate;
-        }
+            if (!string.IsNullOrEmpty(member.PhoneNumber))
+                toUpdate.PhoneNumber = member.PhoneNumber;
 
-        public async Task<Member?> ChangeMemberStatus(int memberId, bool status)
-        {
-            var toUpdate = await _dbContext.Members.FirstOrDefaultAsync(m => m.Id == memberId);
-            
-            if (toUpdate is null)
-                return null;
-
-            if (toUpdate.IsActive == status)
-                return null;
-
-            toUpdate.IsActive = status;
+            if (member.IsActive.HasValue)
+                toUpdate.IsActive = member.IsActive.Value;
 
             await _dbContext.SaveChangesAsync();
 

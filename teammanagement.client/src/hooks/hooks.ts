@@ -5,6 +5,8 @@ import {
   CreateMemberData,
 } from "../components/AddNewMemberDialog/AddNewMemberDialog";
 import { baseAPIUri } from "../const";
+import { useDispatch } from "react-redux";
+import { addMember } from "../store/store";
 
 export function useImportMember(): {
   data: CreateMemberData;
@@ -15,10 +17,10 @@ export function useImportMember(): {
     name: "",
     email: "",
     phoneNumber: "",
+    avatarUrl: null,
   });
 
   const fetchData = useCallback(async () => {
-    console.log('fetch')
     try {
       const response = await axios.get("https://randomuser.me/api/");
       const incomingData = response.data as IncomingMemberData;
@@ -27,7 +29,8 @@ export function useImportMember(): {
         email: member.email,
         phoneNumber: member.phone,
         name: `${member.name.first} ${member.name.last}`,
-      }
+        avatarUrl: member.picture.large,
+      };
       setData(newData);
       return newData;
     } catch (error) {
@@ -53,12 +56,13 @@ export function useDialogOpen() {
 }
 
 export function useSubmitData() {
-    //todo: handle success and error
-    const submitData = async (data: CreateMemberData) => {
-        const response = axios.post(`${baseAPIUri}/Member`, data);
+  const dispatch = useDispatch();
+  //todo: handle success and error
+  const submitData = async (data: CreateMemberData) => {
+    const response = axios.post(`${baseAPIUri}/Member`, data);
+    dispatch(addMember((await response).data));
+    return response;
+  };
 
-        return response;
-    }
-
-    return {submitData};
-  }
+  return { submitData };
+}

@@ -16,7 +16,13 @@
     color: $gray-400;
   }
 
-  &:hover, &:focus-visible, &:focus, &:active, &:focus-within, &:visited, &:target {
+  &:hover,
+  &:focus-visible,
+  &:focus,
+  &:active,
+  &:focus-within,
+  &:visited,
+  &:target {
     border: none;
   }
 

@@ -11,22 +11,34 @@
   & > input {
     color: $text-dark;
     font-size: 14px;
-    width: 100%;
-    border: 1px solid $gray-200;
-    border-radius: 8px;
-    padding: 8px 16px;
+    border: none;
+    width: fit-content;
+    background-color: transparent;
 
-    & .readonly {
-      border: none;
+    &:focus-visible {
+      outline: none;
     }
   }
 
   & > label {
-    position: relative;
-    top: 8px;
-    background-color: white;
     color: $text-color-light;
     font-size: 12px;
-    margin-left: 16px;
+    margin-left: 4px;
+  }
+
+  &.editable {
+    & > input {
+      border: 1px solid $gray-200;
+      border-radius: 8px;
+      padding: 8px 16px;
+      background-color: white;
+      width: 80%;
+    }
+
+    & > label {
+      position: relative;
+      top: 8px;
+      margin-left: 16px;
+    }
   }
 }

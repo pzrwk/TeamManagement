@@ -3,7 +3,7 @@ import InlineButtonGroup from "../InlineButtonGroup/InlineButtonGroup";
 import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import { useImportMember, useSubmitData } from "../../hooks/hooks";
-import './Header.scss';
+import "./Header.scss";
 
 function Header({
   openConfirmationDialog,
@@ -15,7 +15,7 @@ function Header({
   const { submitData } = useSubmitData();
   const { fetchData } = useImportMember();
 
-  const test = async () => {
+  const importMember = async () => {
     const data = await fetchData();
 
     if (data !== undefined) {
@@ -36,7 +36,7 @@ function Header({
           fit
           text="Zaimportuj członka zespołu"
           icon={<CloudDownloadOutlinedIcon />}
-          onClick={() => test()}
+          onClick={importMember}
         />
         <Button
           variant="gray"

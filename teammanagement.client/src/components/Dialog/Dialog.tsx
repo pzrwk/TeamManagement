@@ -1,12 +1,8 @@
 import "./Dialog.scss";
 import React, { ReactNode } from "react";
-import Button from "../Button/Button.tsx";
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
-import Badge from "../Badge/Badge.tsx";
 import IconButton from "../IconButton/IconButton.tsx";
-import CheckIcon from "@mui/icons-material/Check";
-import Input from "../Input/Input.tsx";
 import CloseIcon from "@mui/icons-material/Close";
+import classNames from "classnames";
 
 export type DialogProps = {
   title: string;
@@ -22,37 +18,28 @@ export function Dialog({
   children,
   ...props
 }: DialogProps) {
+  const handleMaskClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      closeDialog();
+    }
+  };
+
   return (
-    <div className="dialog-mask">
+    <div
+      className={classNames("dialog-mask", { invisible: !open, visible: open })}
+      onClick={handleMaskClick}
+    >
       <dialog className="dialog" open={open} {...props}>
-        <DialogHeader
-          title={title}
-          subtitle={subtitle}
-          closeDialog={closeDialog}
-        />
-        {children}
+        <>
+          <div className="dialog-header">
+            <h2>{title}</h2>
+            <IconButton icon={<CloseIcon />} onClick={closeDialog} />
+          </div>
+          {subtitle && <p className="description">{subtitle}</p>}
+          {children}
+        </>
       </dialog>
     </div>
-  );
-}
-
-export function DialogHeader({
-  title,
-  subtitle,
-  closeDialog,
-}: {
-  title: string;
-  subtitle?: string | null;
-  closeDialog: () => void;
-}) {
-  return (
-    <>
-      <div className="dialog-header">
-        <h2>{title}</h2>
-        <IconButton icon={<CloseIcon />} onClick={() => closeDialog()} />
-      </div>
-      {subtitle !== null && subtitle !== '' && subtitle !== undefined && <p className="description">{subtitle}</p>}
-    </>
   );
 }
 

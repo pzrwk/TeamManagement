@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.scss";
 import AddNewMemberDialog from "./components/AddNewMemberDialog/AddNewMemberDialog.tsx";
 import ConfirmationDialog from "./components/Dialog/ConfirmationDialog.tsx";
@@ -7,6 +7,8 @@ import Header from "./components/Header/Header.tsx";
 import axios, { AxiosResponse } from "axios";
 import { baseAPIUri } from "./const.ts";
 import MembersTable from "./components/MembersTable/MembersTable.tsx";
+import { useDispatch } from "react-redux";
+import { initialLoad } from "./store/store.ts";
 
 export type MemberData = {
   id: number;
@@ -15,6 +17,7 @@ export type MemberData = {
   phoneNumber: string;
   isActive: boolean;
   createdAt: string;
+  avatarUrl?: string;
 };
 
 function App() {
@@ -29,12 +32,12 @@ function App() {
     closeDialog: closeConfirmationDialog,
   } = useDialogOpen();
 
-  const [data, setData] = useState<Array<MemberData> | null>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios.get(`${baseAPIUri}/Member`).then((res: AxiosResponse) => {
       const incomingData: Array<MemberData> = res.data;
-      setData(incomingData);
+      dispatch(initialLoad(incomingData));
     });
   }, []);
 
@@ -45,7 +48,7 @@ function App() {
         openConfirmationDialog={openConfirmationDialog}
       />
       <div className="content">
-        <MembersTable data={data}/>
+        <MembersTable/>
       </div>
 
       {isAddMemberDialogOpen &&<AddNewMemberDialog

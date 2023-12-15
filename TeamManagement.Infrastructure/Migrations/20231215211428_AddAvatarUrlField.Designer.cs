@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TeamManagement.Infrastructure;
@@ -11,9 +12,11 @@ using TeamManagement.Infrastructure;
 namespace TeamManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TeamManagementDbContext))]
-    partial class TeamManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215211428_AddAvatarUrlField")]
+    partial class AddAvatarUrlField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
