@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.scss";
 import AddNewMemberDialog from "./components/AddNewMemberDialog/AddNewMemberDialog.tsx";
 import ConfirmationDialog from "./components/Dialog/ConfirmationDialog.tsx";
@@ -21,6 +21,8 @@ export type MemberData = {
 };
 
 function App() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const {
     isDialogOpen: isAddMemberDialogOpen,
     openDialog: openAddMemberDialog,
@@ -35,13 +37,17 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(`${baseAPIUri}/Member`).then((res: AxiosResponse) => {
-      const incomingData: Array<MemberData> = res.data;
-      dispatch(initialLoad(incomingData));
-    })
-    .catch((err: AxiosResponse) => {
-      console.log(err)
-    });
+    axios
+      .get(`${baseAPIUri}/Member`)
+      .then((res: AxiosResponse) => {
+        const incomingData: Array<MemberData> = res.data;
+        dispatch(initialLoad(incomingData));
+        setIsLoading(false);
+      })
+      .catch((err: AxiosResponse) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }, [dispatch]);
 
   return (
@@ -51,20 +57,24 @@ function App() {
         openConfirmationDialog={openConfirmationDialog}
       />
       <div className="content">
-        <MembersTable/>
+        {isLoading ? <div>Loading...</div> : <MembersTable />}
       </div>
 
-      {isAddMemberDialogOpen &&<AddNewMemberDialog
-        open={isAddMemberDialogOpen}
-        closeDialog={closeAddMemberDialog}
-      />}
+      {isAddMemberDialogOpen && (
+        <AddNewMemberDialog
+          open={isAddMemberDialogOpen}
+          closeDialog={closeAddMemberDialog}
+        />
+      )}
 
-      {isConfirmationDialogOpen && <ConfirmationDialog
-        open={isConfirmationDialogOpen}
-        closeDialog={closeConfirmationDialog}
-      >
-        <p>Członek zespołu dodany</p>
-      </ConfirmationDialog>}
+      {isConfirmationDialogOpen && (
+        <ConfirmationDialog
+          open={isConfirmationDialogOpen}
+          closeDialog={closeConfirmationDialog}
+        >
+          <p>Członek zespołu dodany</p>
+        </ConfirmationDialog>
+      )}
     </div>
   );
 }
