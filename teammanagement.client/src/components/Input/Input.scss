@@ -14,6 +14,7 @@
     border: none;
     width: fit-content;
     background-color: transparent;
+    padding: 0px 16px 8px 8px;
 
     &:focus-visible {
       outline: none;
@@ -23,7 +24,8 @@
   & > label {
     color: $text-color-light;
     font-size: 12px;
-    margin-left: 4px;
+    margin-left: 8px;
+    top: 8px;
   }
 
   &.editable {
@@ -37,6 +39,7 @@
 
     & > label {
       position: relative;
+      background-color: white;
       top: 8px;
       margin-left: 16px;
     }

@@ -72,6 +72,8 @@ function EditMemberDialog({
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                alignItems: 'center',
+                height: 'fit-content'
               }}
             >
               <EditableField
@@ -90,6 +92,8 @@ function EditMemberDialog({
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                alignItems: 'center',
+                height: 'fit-content'
               }}
             >
               <EditableField
@@ -108,6 +112,8 @@ function EditMemberDialog({
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                alignItems: 'center',
+                height: 'fit-content'
               }}
             >
               <EditableField

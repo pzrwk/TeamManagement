@@ -4,10 +4,11 @@ import IconButton from "../IconButton/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { baseAPIUri } from "../../const";
 import { updateMember } from "../../store/store";
 import { useDispatch } from "react-redux";
+import _ from "lodash";
 
 type EditableFieldProps = {
   memberId?: number;
@@ -61,7 +62,7 @@ function EditableField({
         setIsEditing(false);
         dispatch(updateMember(res.data));
         updateEditingField("");
-      });
+      })
   };
 
   return (

@@ -10,6 +10,7 @@ import DownloadingOutlinedIcon from "@mui/icons-material/DownloadingOutlined";
 import Input from "../Input/Input.tsx";
 import { useImportMember, useSubmitData } from "../../hooks/hooks.ts";
 import classNames from "classnames";
+import _ from "lodash";
 
 type AddNewMemberDialogProps = Omit<DialogProps, "title" | "subtitle">;
 
@@ -37,8 +38,8 @@ export type IncomingMemberData = {
 };
 
 function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
-  const { data, setData, fetchData } = useImportMember();
-  const { submitData } = useSubmitData();
+  const { data, setData, fetchData, resetData } = useImportMember();
+  const { submitData, errors } = useSubmitData();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -51,7 +52,10 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
         open={open}
         title="Dodawanie nowego członka zespołu"
         subtitle="Wypełnij wszystkie pola poniżej lub pobierz z internetu"
-        closeDialog={closeDialog}
+        closeDialog={() => {
+          closeDialog();
+          resetData();
+        }}
       >
         <DialogContent>
           <Button
@@ -89,6 +93,7 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
                 labelText="Nazwa"
                 value={data.name}
                 onChange={handleChange}
+                error={_.get(errors, 'Name')}
               />
             </div>
             <div>
@@ -99,16 +104,18 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
                 labelText="Adres e-mail"
                 value={data.email}
                 onChange={handleChange}
+                error={_.get(errors, 'Email')}
               />
             </div>
             <div>
               <Input
                 type="phone"
-                name="phone"
+                name="phoneNumber"
                 required
                 labelText="Numer telefonu"
                 value={data.phoneNumber}
                 onChange={handleChange}
+                error={_.get(errors, 'PhoneNumber')}
               />
             </div>
           </div>
@@ -117,13 +124,22 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
           <Button
             variant="transparent"
             text="Anuluj"
-            onClick={() => closeDialog()}
+            onClick={() => {
+              closeDialog();
+              resetData();
+            }}
           />
           <Button
             type="submit"
             variant="orange"
             text="Potwierdź"
-            onClick={() => submitData(data)}
+            onClick={async () => {
+              const added = await submitData(data)
+              if (added) {
+                closeDialog();
+                resetData();
+              }
+            }}
           />
         </DialogFooter>
       </Dialog>

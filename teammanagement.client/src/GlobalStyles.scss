@@ -50,6 +50,12 @@ p {
   font-weight: 500;
   font-size: 12px;
   line-height: 14.52px;
+
+  &.error {
+    color: $helper-rose-dark;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
 }
 
 .warning-text {

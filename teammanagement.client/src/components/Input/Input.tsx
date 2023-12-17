@@ -1,9 +1,11 @@
 import classNames from "classnames";
 import "./Input.scss";
 import React from "react";
+import _ from "lodash";
 
 type InputProps = {
   labelText?: string | null;
+  error?: Array<string> | null;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 function Input({
@@ -11,6 +13,7 @@ function Input({
   required,
   readOnly,
   labelText = null,
+  error = null,
   ...props
 }: InputProps) {
   const label =
@@ -28,7 +31,8 @@ function Input({
         name={name}
         required={required}
         {...props}
-      ></input>
+      />
+      {error && <p className="description error">{_.join(error, '\n')}</p>}
     </div>
   );
 }
