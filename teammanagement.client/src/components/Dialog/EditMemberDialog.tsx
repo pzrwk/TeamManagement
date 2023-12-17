@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../AddNewMemberDialog/AddNewMemberDialog.scss";
 import Button from "../Button/Button";
 import {
@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogProps,
-} from "../Dialog/Dialog";
+} from "./Dialog";
 import Input from "../Input/Input";
 import Badge from "../Badge/Badge";
 import EditableField from "../Input/EditableField";
@@ -29,8 +29,6 @@ function EditMemberDialog({
 
   const [editingField, setEditingField] = useState<string>("");
 
-  useEffect(() => {}, [editingField]);
-
   const toTimeAndDate = (date: string) => {
     const parsedDate = Date.parse(date);
     const dateObj = new Date(parsedDate);
@@ -42,7 +40,6 @@ function EditMemberDialog({
     return `${dateObj.getHours()}:${minutes} ${dateObj.toLocaleDateString()}`;
   };
 
-  console.log(memberData?.avatarUrl);
   return (
     <>
       <Dialog
@@ -68,13 +65,7 @@ function EditMemberDialog({
             </div>
 
             <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: 'center',
-                height: 'fit-content'
-              }}
+              className="editable-field"
             >
               <EditableField
                 memberId={memberData?.id}
@@ -88,13 +79,7 @@ function EditMemberDialog({
               />
             </div>
             <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: 'center',
-                height: 'fit-content'
-              }}
+              className="editable-field"
             >
               <EditableField
                 memberId={memberData?.id}
@@ -108,13 +93,7 @@ function EditMemberDialog({
               />
             </div>
             <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: 'center',
-                height: 'fit-content'
-              }}
+              className="editable-field"
             >
               <EditableField
                 memberId={memberData?.id}

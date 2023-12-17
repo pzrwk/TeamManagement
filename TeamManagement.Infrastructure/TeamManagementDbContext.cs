@@ -15,6 +15,6 @@ namespace TeamManagement.Infrastructure
             modelBuilder.UseSerialColumns();
         }
 
-        public DbSet<Member?> Members { get; set; }
+        public DbSet<Member> Members { get; set; }
     }
 }

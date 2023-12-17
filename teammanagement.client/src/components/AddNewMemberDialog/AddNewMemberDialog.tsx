@@ -93,7 +93,7 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
                 labelText="Nazwa"
                 value={data.name}
                 onChange={handleChange}
-                error={_.get(errors, 'Name')}
+                error={_.get(errors, "Name")}
               />
             </div>
             <div>
@@ -104,7 +104,7 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
                 labelText="Adres e-mail"
                 value={data.email}
                 onChange={handleChange}
-                error={_.get(errors, 'Email')}
+                error={_.get(errors, "Email")}
               />
             </div>
             <div>
@@ -115,7 +115,7 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
                 labelText="Numer telefonu"
                 value={data.phoneNumber}
                 onChange={handleChange}
-                error={_.get(errors, 'PhoneNumber')}
+                error={_.get(errors, "PhoneNumber")}
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ function AddNewMemberDialog({ open, closeDialog }: AddNewMemberDialogProps) {
             variant="orange"
             text="Potwierdź"
             onClick={async () => {
-              const added = await submitData(data)
+              const added = await submitData(data);
               if (added) {
                 closeDialog();
                 resetData();

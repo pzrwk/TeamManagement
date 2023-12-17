@@ -16,7 +16,6 @@ namespace TeamManagement.Infrastructure
                 configuration.RegisterServicesFromAssembly(typeof(CreateMember).Assembly);
                 configuration.RegisterServicesFromAssembly(typeof(UpdateMember).Assembly);
                 configuration.RegisterServicesFromAssembly(typeof(GetAllMembers).Assembly);
-                configuration.RegisterServicesFromAssembly(typeof(GetMemberById).Assembly);
             });
             return services;
         }
@@ -26,8 +25,6 @@ namespace TeamManagement.Infrastructure
 
             services.AddMediatR(configuration =>
                 configuration.RegisterServicesFromAssembly(assembly));
-
-            //services.AddValidatorsFromAssembly(assembly);
 
             return services;
         }

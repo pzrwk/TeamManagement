@@ -15,18 +15,6 @@ public class MemberController : ControllerBase
     {
         _mediator = mediator;
     }
-
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetMemberById(int id)
-    {
-        var query = new GetMemberById { Id = id };
-        var member = await _mediator.Send(query);
-        
-        if (member == null)
-            return NotFound($"Member with id {id} not found");
-
-        return Ok(member);
-    }
     
     [HttpGet]
     public async Task<IActionResult> GetAllMembers()

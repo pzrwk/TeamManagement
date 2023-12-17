@@ -7,7 +7,6 @@ import {
 import { baseAPIUri } from "../const";
 import { useDispatch } from "react-redux";
 import { addMember } from "../store/store";
-import _ from "lodash";
 
 export function useImportMember(): {
   data: CreateMemberData;
@@ -67,15 +66,17 @@ export function useDialogOpen() {
 }
 
 export function useSubmitData() {
-  const dispatch = useDispatch();
   const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
-  //todo: handle success and error
+  
+  const dispatch = useDispatch();
+
   const submitData = async (data: CreateMemberData) => {
     let result: boolean = false;
     await axios.post(`${baseAPIUri}/Member`, data).then((response: AxiosResponse) => {
       dispatch(addMember(response.data));
       result = true;
     }).catch((axiosError: AxiosError) => {
+      // @ts-expect-error ...
       setErrors(axiosError.response?.data.errors);
       result = false;
     });

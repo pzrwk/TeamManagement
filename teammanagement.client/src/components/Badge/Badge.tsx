@@ -7,6 +7,7 @@ type BadgeProps = {
 
 function Badge({ variant }: BadgeProps) {
   const message: string = variant === "success" ? "Aktywny" : "Blokada";
+  
   return <span className={classNames("badge", variant)}>{message}</span>;
 }
 

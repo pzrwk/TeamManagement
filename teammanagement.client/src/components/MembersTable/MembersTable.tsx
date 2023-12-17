@@ -8,7 +8,7 @@ import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import axios, { AxiosResponse } from "axios";
 import { baseAPIUri } from "../../const";
 import { useDialogOpen } from "../../hooks/hooks";
-import EditMemberDialog from "../EditMemberDialog/EditMemberDialog";
+import EditMemberDialog from "../Dialog/EditMemberDialog";
 import classNames from "classnames";
 import Button from "../Button/Button";
 import ConfirmationDialog from "../Dialog/ConfirmationDialog";
@@ -24,34 +24,35 @@ import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 
 type TableProps = React.TableHTMLAttributes<HTMLTableElement>;
 
+const keys = [
+  { name: "name", value: "Nazwa" },
+  { name: "email", value: "Adres e-mail" },
+  { name: "phoneNumber", value: "Numer telefonu" },
+  { name: "isActive", value: "Status" },
+  { name: "createdAt", value: "Data utworzenia" },
+  { name: "action", value: "Akcja" },
+];
+
 function MembersTable({ ...props }: TableProps) {
-  const { isDialogOpen, openDialog, closeDialog } = useDialogOpen();
   const [memberId, setMemberId] = useState<number>(-1);
   const [actionsVisible, setActionsVisible] = useState<boolean>(false);
   const [memberIdWithOpenTooltip, setMemberIdWithOpenTooltip] = useState<
-    number | null
+  number | null
   >(null);
-
-  const dispatch = useDispatch();
-  const data = useSelector((state: TeamManagementState) => state.membersData);
-
+  const [confirmationDialogMessage, setConfirmationDialogMessage] =
+    useState<string>("");
+  
+  const { isDialogOpen, openDialog, closeDialog } = useDialogOpen();
   const {
     isDialogOpen: isConfirmationDialogOpen,
     openDialog: openConfirmationDialog,
     closeDialog: closeConfirmationDialog,
   } = useDialogOpen();
-  const [confirmationDialogMessage, setConfirmationDialogMessage] =
-    useState<string>("");
 
-  const keys = [
-    { name: "name", value: "Nazwa" },
-    { name: "email", value: "Adres e-mail" },
-    { name: "phoneNumber", value: "Numer telefonu" },
-    { name: "isActive", value: "Status" },
-    { name: "createdAt", value: "Data utworzenia" },
-    { name: "action", value: "Akcja" },
-  ];
-
+  const dispatch = useDispatch();
+  const data = useSelector((state: TeamManagementState) => state.membersData);
+  const sorting: Sort = useSelector((state: TeamManagementState) => state.sort);
+  
   const openEditDialog = (id: number) => {
     setMemberId(id);
     openDialog();
@@ -77,10 +78,11 @@ function MembersTable({ ...props }: TableProps) {
           }`
         );
         openConfirmationDialog();
+      })
+      .catch((err: AxiosResponse) => {
+        console.log(err);
       });
   };
-
-  const sorting: Sort = useSelector((state: TeamManagementState) => state.sort);
 
   const showSortIcon = (order: "asc" | "desc") => {
     return order === "asc" ? (
@@ -122,6 +124,13 @@ function MembersTable({ ...props }: TableProps) {
           </tr>
         </thead>
         <tbody>
+          {_.isEmpty(data) && (
+            <tr>
+              <td colSpan={6}>
+                <div className="empty-table">Brak danych</div>
+              </td>
+            </tr>
+          )}
           {_.orderBy(data, sorting.key, sorting.order).map((member) => {
             return (
               <tr key={member.id}>

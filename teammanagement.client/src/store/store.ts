@@ -16,16 +16,19 @@ const initialState: TeamManagementState = {
   sort: {
     key: "name",
     order: "asc",
-  }
+  },
 };
 
 const memberSlice = createSlice({
   name: "member",
   initialState,
   reducers: {
-    initialLoad: (state: TeamManagementState, action: PayloadAction<MemberData[]>) => {
-        state.membersData = action.payload;
-        },
+    initialLoad: (
+      state: TeamManagementState,
+      action: PayloadAction<MemberData[]>
+    ) => {
+      state.membersData = action.payload;
+    },
     addMember: (
       state: TeamManagementState,
       action: PayloadAction<MemberData>
@@ -43,8 +46,10 @@ const memberSlice = createSlice({
         state.membersData[index] = action.payload;
       }
     },
-    sortMembers: (state: TeamManagementState, action: PayloadAction<keyof MemberData>) => {
-      console.log(action);
+    sortMembers: (
+      state: TeamManagementState,
+      action: PayloadAction<keyof MemberData>
+    ) => {
       if (state.sort.key === action.payload) {
         state.sort.order = state.sort.order === "asc" ? "desc" : "asc";
       } else {
@@ -55,8 +60,9 @@ const memberSlice = createSlice({
   },
 });
 
-export const { initialLoad, addMember, updateMember, sortMembers } = memberSlice.actions;
+export const { initialLoad, addMember, updateMember, sortMembers } =
+  memberSlice.actions;
 
 export const store = configureStore({
-    reducer: memberSlice.reducer,
-  });
+  reducer: memberSlice.reducer,
+});

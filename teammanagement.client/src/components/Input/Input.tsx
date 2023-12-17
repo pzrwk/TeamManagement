@@ -20,6 +20,7 @@ function Input({
     labelText !== null && required === true && readOnly !== true
       ? labelText.concat("*")
       : labelText;
+      
   return (
     <div
       className={classNames({ inputBlock: true, editable: readOnly !== true })}
@@ -32,7 +33,7 @@ function Input({
         required={required}
         {...props}
       />
-      {error && <p className="description error">{_.join(error, '\n')}</p>}
+      {error && <p className="description error">{_.join(error, "\n")}</p>}
     </div>
   );
 }

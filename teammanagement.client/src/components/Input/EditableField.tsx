@@ -4,11 +4,10 @@ import IconButton from "../IconButton/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { baseAPIUri } from "../../const";
 import { updateMember } from "../../store/store";
 import { useDispatch } from "react-redux";
-import _ from "lodash";
 
 type EditableFieldProps = {
   memberId?: number;
@@ -32,9 +31,10 @@ function EditableField({
   updateEditingField,
 }: EditableFieldProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const originalValue = value;
   const [currentValue, setCurrentValue] = useState<string>(value || "");
   const dispatch = useDispatch();
+  
+  const originalValue = value;
 
   useEffect(() => {
     setCurrentValue(value || "");
@@ -63,6 +63,9 @@ function EditableField({
         dispatch(updateMember(res.data));
         updateEditingField("");
       })
+      .catch((err: AxiosResponse) => {
+        console.log(err);
+      });
   };
 
   return (

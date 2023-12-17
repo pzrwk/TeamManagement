@@ -14,7 +14,7 @@ namespace TeamManagement.Infrastructure.Repositories
             _dbContext = dbContext;
         }
         
-        public async Task<Member?> AddMember(Member? member)
+        public async Task<Member> AddMember(Member member)
         {
             _dbContext.Members.Add(member);
 
@@ -26,11 +26,6 @@ namespace TeamManagement.Infrastructure.Repositories
         public async Task<ICollection<Member>> GetAll()
         {
             return await _dbContext.Members.ToListAsync();
-        }
-
-        public async Task<Member?> GetMemberById(int id)
-        {
-            return await _dbContext.Members.FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<Member?> UpdateMember(UpdateMember member)

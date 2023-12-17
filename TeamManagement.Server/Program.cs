@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TeamManagement.Application.Member.Commands;
 using TeamManagement.Application.Member.Queries;
 using TeamManagement.Infrastructure;
@@ -27,6 +28,13 @@ builder.Services
     .AddInfrastructure();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<TeamManagementDbContext>();
+    context.Database.Migrate();
+}
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

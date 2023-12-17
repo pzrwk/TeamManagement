@@ -38,8 +38,11 @@ function App() {
     axios.get(`${baseAPIUri}/Member`).then((res: AxiosResponse) => {
       const incomingData: Array<MemberData> = res.data;
       dispatch(initialLoad(incomingData));
+    })
+    .catch((err: AxiosResponse) => {
+      console.log(err)
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
