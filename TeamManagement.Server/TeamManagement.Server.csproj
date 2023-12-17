@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TypeScriptTarget>ESNext</TypeScriptTarget>
@@ -33,9 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TeamManagement.Application\TeamManagement.Application.csproj" />
-    <ProjectReference Include="..\teammanagement.client\TeamManagement.Web.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+	<ProjectReference Include="..\teammanagement.client\TeamManagement.Web.esproj" />
     <ProjectReference Include="..\TeamManagement.Infrastructure\TeamManagement.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TeamManagement.Domain.Entities
+﻿namespace TeamManagement.Domain.Entities
 {
     public class Member
     {
